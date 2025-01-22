@@ -46,6 +46,14 @@ const products = [
     description:'Ingram’s Camphor Cream Herbal 150ml helps to restore moisture and repair very dry, chapped skin with a rich blend of glycerine and moisturising ingredients.'
   }
 ];
+const Footer = ()=>{
+  const CurrentYear = new Date().getFullYear();
+  return (
+    <footer className='text-center bg-gray-300 p-4 font-bold'>
+      <p>&copy; {CurrentYear} Pampas Bliss. All rights reserved.</p>
+    </footer>
+  );
+};
 
 function ProductCard({ product, addToCart }) {
   return (
@@ -137,6 +145,9 @@ function App() {
           />
           <Route path="/cart" element={<Cart cart={cart} removeFromCart={removeFromCart} />} />
         </Routes>
+      </div>
+      <div>
+        <Footer />
       </div>
     </Router>
   );
