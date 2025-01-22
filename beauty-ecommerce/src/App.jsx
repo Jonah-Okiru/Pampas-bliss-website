@@ -69,7 +69,7 @@ function ProductCard({ product, addToCart }) {
   );
 }
 
-function Cart({ cart }) {
+function Cart({ cart, removeFromCart }) {
   const whatsappLink = `https://wa.me/?text=${encodeURIComponent(
     `I would like to order: \n${cart.map((item) => `${item.name} - ${item.price}`).join('\n')}`
   )}`;
@@ -82,7 +82,12 @@ function Cart({ cart }) {
       ) : (
         <ul className="list-disc pl-5">
           {cart.map((item, index) => (
-            <li key={index}>{item.name} - {item.price}</li>
+            <li key={index} className='flex justify-between items-center'>
+              {item.name} - {item.price}
+              <button className='ml-1 border rounded bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600' onClick={() => removeFromCart(index)}>
+                Remove
+              </button>
+            </li>
           ))}
         </ul>
       )}
@@ -106,6 +111,9 @@ function App() {
   const addToCart = (product) => {
     setCart((prevCart) => [...prevCart, product]);
   };
+  const removeFromCart =(index)=> {
+    setCart((prevCart)=> prevCart.filter((_, i) => i !==index));
+  };
 
   return (
     <Router>
@@ -127,7 +135,7 @@ function App() {
               </div>
             }
           />
-          <Route path="/cart" element={<Cart cart={cart} />} />
+          <Route path="/cart" element={<Cart cart={cart} removeFromCart={removeFromCart} />} />
         </Routes>
       </div>
     </Router>
