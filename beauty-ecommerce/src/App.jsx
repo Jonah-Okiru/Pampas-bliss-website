@@ -62,7 +62,11 @@ const Footer = ()=>{
   );
 };
 
-function ProductCard({ product, addToCart }) {
+function ProductCard({ product, addToCart, expandedProductId, setExpandedProductId }) {
+  const isExpanded = expandedProductId === product.id;
+  const toggleDetails = () => {
+    setExpandedProductId(isExpanded ? null : product.id);
+  }
   return (
     <div className="border rounded p-4 flex flex-col items-center bg-pink-100 hover:shadow-2xl transition-shadow duration-300">
       <img src={product.image} alt={product.name} className="w-30 h-30 object-cover mb-4" />
@@ -70,10 +74,13 @@ function ProductCard({ product, addToCart }) {
       <p className="text-gray-700">{product.price}</p>
       <button
         className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        onClick={() => alert(product.description)}
+        onClick={toggleDetails}
       >
-        View Details
+        {isExpanded ? 'Hide Details' : 'View Details'}
       </button>
+      {isExpanded && (
+        <p className='mt-4 text-gray-800 bg-gray-200 p-2 rounded'>{product.description}</p>
+      )}
       <button
         className="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
         onClick={() => addToCart(product)}
@@ -124,6 +131,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedProductId, setExpandedProductId] = useState(null);
 
   const addToCart = (product) => {
     setCart((prevCart) => [...prevCart, product]);
@@ -177,7 +185,13 @@ function App() {
             element={
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} addToCart={addToCart} />
+                  <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    addToCart={addToCart} 
+                    expandedProductId={expandedProductId}
+                    setExpandedProductId={setExpandedProductId}
+                  />
                 ))}
               </div>
             }
