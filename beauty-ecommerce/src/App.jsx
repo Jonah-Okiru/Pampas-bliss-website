@@ -132,6 +132,8 @@ function App() {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedProductId, setExpandedProductId] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  
 
   const addToCart = (product) => {
     setCart((prevCart) => [...prevCart, product]);
@@ -140,11 +142,15 @@ function App() {
     setCart((prevCart)=> prevCart.filter((_, i) => i !==index));
   };
   const categories = [...new Set(products.map((product) => product.category))];
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory  = categoryFilter ? product.category === categoryFilter: true;
-    const matchesSearch  = product.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const handleSearch = () => {
+    const filtered  = products.filter((product) => {
+      const matchesCategory  = categoryFilter ? product.category === categoryFilter: true;
+      const matchesSearch  = product.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+    setFilteredProducts(filtered);
+  };
+  
 
   return (
     <Router>
@@ -172,6 +178,12 @@ function App() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+            <button 
+              onClick={handleSearch}
+               className="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Search
+            </button>
           </div>
         </nav>
         <h1 className='text-center font-extrabold pb-4 text-black'>PAMPERING BLISS</h1>
