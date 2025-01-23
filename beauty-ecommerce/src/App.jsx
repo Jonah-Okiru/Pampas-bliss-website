@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 const products = [
   {
     id: 1,
+    category:'Facial products',
     name: 'Cocoa  butter formula products (Skin therapy face oil)',
     image: '/images/Cocoa_butter_formula.jpeg',
     price: 'ksh25',
@@ -12,6 +13,7 @@ const products = [
   },
   {
     id: 2,
+    category:'General body',
     name: 'Hobby Marshmallow Vanilla Body Wash',
     image: '/images/Hobby_Marshmallow.jpeg',
     price: 'Ksh 15',
@@ -19,6 +21,7 @@ const products = [
   },
   {
     id: 3,
+    category:'Body lotions',
     name: 'NIVEA Cool Kick Body Lotion for Men - Refreshing Cooling and 48-Hour Moisture',
     image: '/images/Nivea_men.jpeg',
     price: 'Ksh10',
@@ -26,6 +29,7 @@ const products = [
   },
   {
     id: 4,
+    category:'body lotions',
     name: 'Oh So Heavenly Creme Oil Body Lotion Pure Honey & Almond Oil 720ml',
     image: '/images/Oh_So_Heavenly.jpeg',
     price: 'Ksh100',
@@ -33,6 +37,7 @@ const products = [
   },
   {
     id:5,
+    category:'body cream',
     name:'Pro White vitamin C Tumeric Cream',
     image:'/images/Pro_white_tumeric.jpeg',
     price: 'Ksh 300',
@@ -40,12 +45,14 @@ const products = [
   },
   {
     id:6,
+    category:'Skin products',
     name:'Ingrams Skin doctor',
     image:'/images/Ingram.jpeg',
     price:'Ksh 260',
     description:'Ingram’s Camphor Cream Herbal 150ml helps to restore moisture and repair very dry, chapped skin with a rich blend of glycerine and moisturising ingredients.'
   }
 ];
+
 const Footer = ()=>{
   const CurrentYear = new Date().getFullYear();
   return (
@@ -115,6 +122,8 @@ function Cart({ cart, removeFromCart }) {
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const addToCart = (product) => {
     setCart((prevCart) => [...prevCart, product]);
@@ -122,22 +131,52 @@ function App() {
   const removeFromCart =(index)=> {
     setCart((prevCart)=> prevCart.filter((_, i) => i !==index));
   };
+  const categories = [...new Set(products.map((product) => product.category))];
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory  = categoryFilter ? product.category === categoryFilter: true;
+    const matchesSearch  = product.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <Router>
       <div className="container mx-auto p-4">
-        <nav className="mb-4 bg-green-200">
-          <Link to="/" className="text-blue-500 font-extrabold pl-2 hover:underline mr-6">Home</Link>
-          <Link to="/cart" className="text-blue-500 font-extrabold hover:underline">Cart</Link>
-          <h1 className='text-center font-extrabold pb-4 text-black'>Pampers Bliss Cosmetics</h1>
+        <nav className="mb-4 bg-green-200 flex flex-wrap items-center justify-between p-4">
+          <div>
+            <Link to="/" className="text-blue-500 font-extrabold pl-2 hover:underline mr-6">Home</Link>
+            <Link to="/cart" className="text-blue-500 font-extrabold hover:underline mr-6">Cart</Link>
+          </div>
+          <div>
+            <select
+              className='mr-4 p-2 rounded border'
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="">All Categories</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+            <input 
+              type="text" 
+              placeholder='Search products...'
+              className='p-2 border rounded'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </nav>
+        <h1 className='text-center font-extrabold pb-4 text-black'>PAMPERING BLISS</h1>
+
+        
+        
 
         <Routes>
           <Route
             path="/"
             element={
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} addToCart={addToCart} />
                 ))}
               </div>
