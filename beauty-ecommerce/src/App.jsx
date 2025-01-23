@@ -50,14 +50,14 @@ const Footer = ()=>{
   const CurrentYear = new Date().getFullYear();
   return (
     <footer className='text-center bg-gray-300 p-4 font-bold'>
-      <p>&copy; {CurrentYear} Pampas Bliss. All rights reserved.</p>
+      <p>&copy; {CurrentYear} Pampers Bliss. All rights reserved.</p>
     </footer>
   );
 };
 
 function ProductCard({ product, addToCart }) {
   return (
-    <div className="border rounded p-4 flex flex-col items-center bg-pink-100">
+    <div className="border rounded p-4 flex flex-col items-center bg-pink-100 hover:shadow-2xl transition-shadow duration-300">
       <img src={product.image} alt={product.name} className="w-30 h-30 object-cover mb-4" />
       <h2 className="text-lg font-bold">{product.name}</h2>
       <p className="text-gray-700">{product.price}</p>
@@ -92,7 +92,7 @@ function Cart({ cart, removeFromCart }) {
           {cart.map((item, index) => (
             <li key={index} className='flex justify-between items-center'>
               {item.name} - {item.price}
-              <button className='ml-1 border rounded bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600' onClick={() => removeFromCart(index)}>
+              <button className='ml-1 border bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600' onClick={() => removeFromCart(index)}>
                 Remove
               </button>
             </li>
