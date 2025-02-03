@@ -10,6 +10,7 @@ function App() {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedProductId, setExpandedProductId] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
   const addToCart = (product) => {
     setCart((prevCart) => [...prevCart, product]);
@@ -24,10 +25,10 @@ function App() {
   const handleSearch = () => {
     const filtered = products.filter((product) => {
       const matchesCategory = categoryFilter ? product.category === categoryFilter : true;
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = searchQuery? product.name.toLowerCase().includes(searchQuery.toLowerCase()):true;
       return matchesCategory && matchesSearch;
     });
-    return filtered;
+    setFilteredProducts(filtered);
   };
 
   return (
@@ -61,7 +62,7 @@ function App() {
             />
             <button
               className="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              onClick={() => {handleSearch}}
+              onClick={handleSearch}
             >
               Search
             </button>
@@ -69,7 +70,7 @@ function App() {
         </nav>
 
         <Routes>
-          <Route path="/" element={<HomePage products={handleSearch()} addToCart={addToCart} expandedProductId={expandedProductId} setExpandedProductId={setExpandedProductId} />} />
+          <Route path="/" element={<HomePage products={filteredProducts} addToCart={addToCart} expandedProductId={expandedProductId} setExpandedProductId={setExpandedProductId} />} />
           <Route path="/cart" element={<CartPage cart={cart} removeFromCart={removeFromCart} />} />
         </Routes>
 
