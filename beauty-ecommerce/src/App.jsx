@@ -34,7 +34,10 @@ function App() {
     <Router>
       <div className="container mx-auto p-4">
         <nav className="mb-4 bg-green-200 flex flex-wrap items-center justify-between p-4">
-          <div>
+          <div className='flex items-center'>
+            <Link to="/">
+              <img src="/images/logo.png" alt="Pampering Bliss logo"  className='h-12 mr-4'/>
+            </Link>
             <Link to="/" className="text-blue-500 font-extrabold pl-2 hover:underline mr-6">Home</Link>
             <Link to="/cart" className="text-blue-500 font-extrabold hover:underline mr-6">Cart</Link>
           </div>
